@@ -22,15 +22,23 @@ def clean_game_title(title: str) -> str:
 
 async def download(uri: str, destination: str, appendExtension: bool = False):
     async with ClientSession() as session:
+        FILE_DEST = destination
+
+        if appendExtension:
+            regex = re.compile(r"\.([\w]{3,4})")
+            matchedExtensions = regex.findall(uri)
+            FILE_DEST = "%s.%s" % (destination, matchedExtensions[-1])
+        
+        # Check if downloaded file already exists
+        if os.path.exists(FILE_DEST):
+            print("%s already exists" % FILE_DEST)
+            return
+        
+        print("Downloading to %s" % FILE_DEST)
+
+        # Send Download Request
         async with session.get(uri) as resp:
-            FILE_DEST = destination
-
-            if appendExtension:
-                components = resp.url.name.split(".")
-                FILE_DEST = "%s.%s" % (destination, components[-1])
-
             data = await resp.read()
-
             with open(FILE_DEST, "wb") as f:
                 f.write(data)
 
