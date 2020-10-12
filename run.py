@@ -43,6 +43,55 @@ async def download(uri: str, destination: str, appendExtension: bool = False):
                 f.write(data)
 
 
+async def download_screenshots(xbl_client: XboxLiveClient, offset: int = 0):
+    # Get Screenshots
+    screenshotResponse = await xbl_client.screenshots.get_recent_own_screenshots(skip_items = offset, max_items = 100)
+
+    # Iterate screenshots
+    for idx, screenshot in enumerate(screenshotResponse.screenshots):
+        TARGET_DIR_GAME = "%s/%s" % (TARGET_DIR, clean_game_title(screenshot.title_name))
+        
+        # Create Game Folder if it does not exist
+        os.makedirs(TARGET_DIR_GAME, exist_ok=True)
+
+        SCREENSHOT_DESTINATION = "%s/%s" % (TARGET_DIR_GAME, screenshot.date_taken.strftime("%Y-%m-%d_%H-%M-%S"))
+        
+        await download(screenshot.screenshot_uris[0].uri, SCREENSHOT_DESTINATION, True)
+
+        print("Screenshot %d downloaded" % (offset + idx + 1))
+    
+    # Do recursion
+    amount = len(screenshotResponse.screenshots)
+    if amount > 0:
+        await download_screenshots(xbl_client, amount + offset)
+    else:
+        print("Downloaded %d screenshots" % offset) 
+
+async def download_gameclips(xbl_client: XboxLiveClient, offset: int = 0):
+    # Get Game Clips
+    clipsResponse = await xbl_client.gameclips.get_saved_own_clips(skip_items = offset, max_items = 30)
+
+    # Iterate Game Clips
+    for idx, clip in enumerate(clipsResponse.game_clips):
+        TARGET_DIR_GAME = "%s/%s" % (TARGET_DIR, clean_game_title(clip.title_name))
+        
+        # Create Game Folder if it does not exist
+        os.makedirs(TARGET_DIR_GAME, exist_ok=True)
+
+        CLIP_DESTINATION = "%s/%s" % (TARGET_DIR_GAME, clip.date_recorded.replace(":", "-"))
+        
+        await download(clip.game_clip_uris[0].uri, CLIP_DESTINATION, True)
+
+        print("Clip %d downloaded" % (offset + idx + 1))
+    
+    # Do recursion
+    amount = len(clipsResponse.game_clips)
+    if amount > 0:
+        await download_gameclips(xbl_client, amount + offset)
+    else:
+        print("Downloaded %d screenshots" % offset) 
+
+
 async def run(): 
     async with ClientSession() as session:
         # Setup Authentication
@@ -66,19 +115,8 @@ async def run():
         # Setup Xbox API Client
         xbl_client = XboxLiveClient(auth_mgr)
 
-        # Get Screenshots
-        screenshotResponse = await xbl_client.screenshots.get_saved_own_screenshots(max_items = 100)
-
-        # Iterate screenshots
-        for screenshot in screenshotResponse.screenshots:
-            TARGET_DIR_GAME = "%s/%s" % (TARGET_DIR, clean_game_title(screenshot.title_name))
-            
-            # Create Game Folder if it does not exist
-            os.makedirs(TARGET_DIR_GAME, exist_ok=True)
-
-            SCREENSHOT_DESTINATION = "%s/%s" % (TARGET_DIR_GAME, screenshot.date_taken.strftime("%Y-%m-%d_%H-%M-%S"))
-            
-            await download(screenshot.screenshot_uris[0].uri, SCREENSHOT_DESTINATION, True)
+        await download_screenshots(xbl_client)
+        await download_gameclips(xbl_client)
 
 # RUN
 loop = asyncio.new_event_loop()
