@@ -1,0 +1,8 @@
+version: "3"
+services:
+  node:
+    build: .
+    container_name: xboxdvr-node
+    volumes:
+      - ./NodeJS:/home/app
+      - ./.vscode-server:/home/node/.vscode-server

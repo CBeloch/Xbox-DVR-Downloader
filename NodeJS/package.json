@@ -1,0 +1,16 @@
+{
+  "name": "dvr-downloader",
+  "version": "1.0.0",
+  "description": "Download Xbox Game DVR Clips and Screenshots",
+  "main": "index.js",
+  "author": "Christopher Beloch",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^14.11.8",
+    "@types/node-fetch": "^2.5.7",
+    "@types/x-ray": "^2.3.3",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3",
+    "x-ray": "^2.3.4"
+  }
+}
