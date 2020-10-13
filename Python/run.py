@@ -13,7 +13,7 @@ from xbox.webapi.authentication.models import OAuth2TokenResponse
 
 CLIENT_ID = ""
 CLIENT_SECRET = ""
-TOKEN_DIR = "/Users/cbeloch/Library/Application Support/xbox/tokens.json"
+TOKEN_DIR = "%s/Library/Application Support/xbox/tokens.json" % os.environ['HOME']
 
 TARGET_DIR = "./Games"
 
