@@ -38,7 +38,15 @@ async def download(uri: str, destination: str, appendExtension: bool = False):
 
         # Send Download Request
         async with session.get(uri) as resp:
+            # Be sure to have a valid response
+            if 200 <= resp.status < 300:
+                pass
+            else:
+                print("> Error: Status Code %d" % resp.status)
+                return
+
             data = await resp.read()
+
             with open(FILE_DEST, "wb") as f:
                 f.write(data)
 
