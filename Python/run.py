@@ -58,14 +58,16 @@ async def download_screenshots(xbl_client: XboxLiveClient, offset: int = 0):
         
         await download(screenshot.screenshot_uris[0].uri, SCREENSHOT_DESTINATION, True)
 
-        print("Screenshot %d downloaded" % (offset + idx + 1))
+        # print("Screenshot %d downloaded" % (offset + idx + 1))
     
     # Do recursion
     amount = len(screenshotResponse.screenshots)
-    if amount > 0:
-        await download_screenshots(xbl_client, amount + offset)
-    else:
-        print("Downloaded %d screenshots" % offset) 
+    # if amount > 0:
+    #     await download_screenshots(xbl_client, amount + offset)
+    # else:
+    #     print("Downloaded %d screenshots" % offset) 
+    
+    print("Downloaded %d screenshots" % (offset + amount)) 
 
 async def download_gameclips(xbl_client: XboxLiveClient, offset: int = 0):
     # Get Game Clips
@@ -82,14 +84,16 @@ async def download_gameclips(xbl_client: XboxLiveClient, offset: int = 0):
         
         await download(clip.game_clip_uris[0].uri, CLIP_DESTINATION, True)
 
-        print("Clip %d downloaded" % (offset + idx + 1))
+        # print("Clip %d downloaded" % (offset + idx + 1))
     
     # Do recursion
     amount = len(clipsResponse.game_clips)
-    if amount > 0:
-        await download_gameclips(xbl_client, amount + offset)
-    else:
-        print("Downloaded %d screenshots" % offset) 
+    # if amount > 0:
+    #     await download_gameclips(xbl_client, amount + offset)
+    # else:
+    #     print("Downloaded %d gameclips" % offset) 
+
+    print("Downloaded %d gameclips" % (offset + amount)) 
 
 
 async def run(): 
