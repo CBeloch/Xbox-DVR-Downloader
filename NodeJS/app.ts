@@ -58,13 +58,19 @@ async function download(urlString: string, destination: string, filename: string
     let response = await fetch(urlString)
 
     if (response.ok) {
-
-        let fileStream = fs.createWriteStream(fileDestination);
-        response.body.pipe(fileStream)
-        console.log(`Downloaded ${fileDestination}`)
-
+        await new Promise((resolve, reject) => {
+            let fileStream = fs.createWriteStream(fileDestination)
+            response.body.pipe(fileStream)
+            response.body.on("error", (err) => {
+                reject(err);
+            });
+            fileStream.on('finish', () => {
+                console.log(`Downloaded ${fileDestination}`)
+                resolve()
+            })
+        })
     } else {
-        console.log(`Error downloading - Status code: ${response.status}`) 
+        console.log(`Error downloading - Status code: ${response.status}`)
     }
 }
 
