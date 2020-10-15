@@ -78,7 +78,7 @@ async function getScreenshots(): Promise<[ScreenshotData]> {
     return await x(`https://gamerdvr.com/gamer/${GAMERTAG}/screenshots`, 'ul.slideshow-image-viewer li', [
         {
             gameTitle: '.top-row a',
-            gameTitleSlug: '.tow-row a | cleanGameTitle',
+            gameTitleSlug: '.top-row a | cleanGameTitle',
             dateTime: x('.content-row a@href', '.toggle-details time | formattedDate'),
             download: '@data-x-s'
         }
@@ -90,7 +90,7 @@ async function getGameClips(): Promise<[GameClipData]> {
     return await x(`https://gamerdvr.com/gamer/${GAMERTAG}/videos`, 'ul.filter-clips li', [
         {
             gameTitle: '.top-row a',
-            gameTitleSlug: '.tow-row a | cleanGameTitle',
+            gameTitleSlug: '.top-row a | cleanGameTitle',
             dateTime: x('.content-row a@href', '.toggle-details time | formattedDate'),
             download: '@data-x-s'
         }
@@ -99,15 +99,18 @@ async function getGameClips(): Promise<[GameClipData]> {
 }
 
 async function run() {
+    console.log('Will grab screenshots...')
     let screenshots = await getScreenshots()
-    for (const screen of screenshots)  {
+    for (const screen of screenshots) {
         let save_dir = `${TARGET_DIR}/${screen.gameTitleSlug}`
         console.log(`Downloading screenshot for ${screen.gameTitle}...`)
         await download(screen.download, save_dir, screen.dateTime)
+        console.log('') // Log empty line
     }
 
+    console.log('Will grab game clips...')
     let clips = await getGameClips()
-    for (const clip of clips)  {
+    for (const clip of clips) {
         let save_dir = `${TARGET_DIR}/${clip.gameTitleSlug}`
         console.log(`Downloading clip for ${clip.gameTitle}...`)
         await download(clip.download, save_dir, clip.dateTime)
