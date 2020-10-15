@@ -2,10 +2,14 @@ import XRay from "x-ray"
 import { default as fs } from 'fs'
 import { default as fetch } from 'node-fetch'
 
-const GAMERTAG = 'cbeloch'
+import { ScreenshotData, GameClipData } from './model'
+
+const args = process.argv.slice(2) // Remove the arguments we don't care about
+
+const GAMERTAG = process.env.GAMERTAG ?? args[0]
 const TARGET_DIR = "./Games"
 
-let x = XRay({
+const x = XRay({
     filters: {
         cleanGameTitle(title: string): string {
             let regex = /[^\d\w\-_\s]/gi
@@ -26,17 +30,6 @@ let x = XRay({
         }
     }
 })
-
-
-interface ScreenshotData {
-    gameTitle: string
-    gameTitleSlug: string
-    dateTime: string
-    download: string
-}
-
-interface GameClipData extends ScreenshotData {
-}
 
 async function download(urlString: string, destination: string, filename: string | null) {
     fs.mkdirSync(destination, { recursive: true })
@@ -118,4 +111,11 @@ async function run() {
     }
 }
 
-run()
+if (!GAMERTAG) {
+    console.error('Please pass a gamertag')
+    console.log('ts-node app.ts GAMERTAG')
+    console.log('')
+    console.log('You can also set a GAMERTAG ENV variable')
+} else {
+    run()
+}
