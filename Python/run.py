@@ -11,10 +11,7 @@ from xbox.webapi.common.exceptions import AuthenticationException
 
 from xbox.webapi.authentication.models import OAuth2TokenResponse
 
-CLIENT_ID = ""
-CLIENT_SECRET = ""
-TOKEN_DIR = "%s/Library/Application Support/xbox/tokens.json" % os.environ['HOME']
-
+TOKEN_DIR = "./token.json"
 TARGET_DIR = "./Games"
 
 def clean_game_title(title: str) -> str:
@@ -109,7 +106,7 @@ async def run():
         # Setup Authentication
 
         auth_mgr = AuthenticationManager(
-            session, CLIENT_ID, CLIENT_SECRET, ""
+            session, None, None, ""
         )
 
         with open(TOKEN_DIR, mode="r") as f:
