@@ -47,7 +47,7 @@ async function download(urlString: string, destination: string, filename: string
     let baseNameParts = baseName.split('.')
     let fileExtension = baseNameParts[baseNameParts.length - 1]
 
-    let fullfilename = filename ? `${filename}.${fileExtension}` :  baseName
+    let fullfilename = filename ? `${filename}.${fileExtension}` : baseName
 
     let fileDestination = `${destination}/${fullfilename}`
 
