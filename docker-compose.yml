@@ -1,8 +1,10 @@
 version: "3"
 services:
-  node:
-    build: .
-    container_name: xboxdvr-node
+  dvr-downloader:
+    build:
+      context: .
+      dockerfile: Dockerfile.node.prod
     volumes:
-      - ./NodeJS:/home/app
-      - ./.vscode-server:/home/node/.vscode-server
+      - ./Games:/home/app/Games
+    env_file:
+      - archiver.env

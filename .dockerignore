@@ -1,0 +1,10 @@
+.vscode-server/
+.git/
+.DS_Store
+
+NodeJS/node_modules/
+NodeJS/Games/
+
+Python/Games/
+
+Games/

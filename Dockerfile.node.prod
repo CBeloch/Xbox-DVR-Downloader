@@ -1,0 +1,17 @@
+FROM node:lts as build
+COPY ./NodeJS /home/app
+WORKDIR /home/app
+RUN yarn install
+RUN npm run build
+
+FROM node:lts-alpine3.12
+COPY --from=build /home/app/dist /home/app
+COPY ./NodeJS/package.json /home/app
+COPY ./NodeJS/tsconfig.json /home/app
+COPY ./NodeJS/yarn.lock /home/app
+
+WORKDIR /home/app
+RUN yarn install --prod
+CMD node app
+
+VOLUME /home/app/Games

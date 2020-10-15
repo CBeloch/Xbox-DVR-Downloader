@@ -17,7 +17,7 @@
     "x-ray": "^2.3.4"
   },
   "scripts": {
-    "build": "typescript",
+    "build": "yarn && npx typescript",
     "downloadDev": "ts-node app",
     "download": "node ./dist/app"
   }
