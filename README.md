@@ -14,7 +14,7 @@ I created two scripts.
 
 The scripts will download all media they can find and save them in a folder per game and names the media by the capture date and time.
 
-You an run the scripts again, I've implemented code that will skip media if the target file already exists.
+You can run the scripts again, I've implemented code that will skip media if the target file already exists.
 
 [TOC]
 
