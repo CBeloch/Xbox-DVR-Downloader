@@ -58,6 +58,12 @@ python run.py
 
 You'll find all the downloaded media in the `./Games` folder
 
+If you want to save the media in a different folder, add the path as an additional parameter
+
+```bash
+python run.py "../Xbox DVR"
+```
+
 # NodeJS
 
 >  **Reminder**

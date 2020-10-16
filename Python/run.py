@@ -1,4 +1,5 @@
 import sys
+import os
 import asyncio
 
 import lib.helper as helper
@@ -13,7 +14,9 @@ from xbox.webapi.common.exceptions import AuthenticationException
 from xbox.webapi.authentication.models import OAuth2TokenResponse
 
 TOKEN_DIR = "./token.json"
-TARGET_DIR = "./Games"
+TARGET_DIR = "./Games" if len(sys.argv) == 1 else sys.argv[1]
+
+TARGET_DIR_ABS = os.path.abspath(TARGET_DIR)
 
 async def run(): 
     async with ClientSession() as session:
@@ -38,8 +41,8 @@ async def run():
         # Setup Xbox API Client
         xbl_client = XboxLiveClient(auth_mgr)
 
-        await downloader.screenshots(TARGET_DIR, xbl_client)
-        await downloader.gameclips(TARGET_DIR, xbl_client)
+        await downloader.screenshots(TARGET_DIR_ABS, xbl_client)
+        await downloader.gameclips(TARGET_DIR_ABS, xbl_client)
 
 # RUN
 loop = asyncio.new_event_loop()
