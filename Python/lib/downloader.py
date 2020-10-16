@@ -37,6 +37,8 @@ async def download(uri: str, destination: str, appendExtension: bool = False):
                 f.write(data)
 
 async def screenshots(TARGET_DIR: str, xbl_client: XboxLiveClient, offset: int = 0):
+    print("Will begin downloading screenshots...") 
+
     # Get Screenshots
     screenshotResponse = await xbl_client.screenshots.get_recent_own_screenshots(skip_items = offset, max_items = 100)
 
@@ -60,9 +62,11 @@ async def screenshots(TARGET_DIR: str, xbl_client: XboxLiveClient, offset: int =
     # else:
     #     print("Downloaded %d screenshots" % offset) 
     
-    print("Downloaded %d screenshots" % (offset + amount)) 
+    print("Done downloading screenshots") 
 
 async def gameclips(TARGET_DIR: str, xbl_client: XboxLiveClient, offset: int = 0):
+    print("Will begin downloading gameclips...") 
+
     # Get Game Clips
     clipsResponse = await xbl_client.gameclips.get_saved_own_clips(skip_items = offset, max_items = 30)
 
@@ -86,5 +90,5 @@ async def gameclips(TARGET_DIR: str, xbl_client: XboxLiveClient, offset: int = 0
     # else:
     #     print("Downloaded %d gameclips" % offset) 
 
-    print("Downloaded %d gameclips" % (offset + amount)) 
+    print("Done downloading gameclips") 
 

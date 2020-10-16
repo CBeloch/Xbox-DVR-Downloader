@@ -19,6 +19,14 @@ TARGET_DIR = "./Games" if len(sys.argv) == 1 else sys.argv[1]
 TARGET_DIR_ABS = os.path.abspath(TARGET_DIR)
 
 async def run(): 
+    # Check for Token
+    if not os.path.exists(TOKEN_DIR):
+        print("Can't find token.json in the current folder")
+        sys.exit(-1)
+
+    print("All media will be downloaded to")
+    print("> %s" % TARGET_DIR_ABS)
+
     async with ClientSession() as session:
         # Setup Authentication
 
