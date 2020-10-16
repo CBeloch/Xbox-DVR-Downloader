@@ -9,12 +9,16 @@ const args = process.argv.slice(2) // Remove the arguments we don't care about
 const GAMERTAG = process.env.GAMERTAG ?? args[0]
 const TARGET_DIR = "./Games"
 
+// Setup x-ray
 const x = XRay({
     filters: {
+        // Filter to cleanup the game titles
         cleanGameTitle(title: string): string {
+            // only keep digits, word characters, dashes, underscores and whitespaces
             let regex = /[^\d\w\-_\s]/gi
             return title.replace(regex, '')
         },
+        // Format date for our file naming
         formattedDate: function(value: string) {
             try {
                 let date = new Date(value)
@@ -31,6 +35,7 @@ const x = XRay({
     }
 })
 
+// Download file from url
 async function download(urlString: string, destination: string, filename: string | null) {
     fs.mkdirSync(destination, { recursive: true })
 
@@ -67,6 +72,7 @@ async function download(urlString: string, destination: string, filename: string
     }
 }
 
+// Get screenshot data
 async function getScreenshots(): Promise<[ScreenshotData]> {
     return await x(`https://gamerdvr.com/gamer/${GAMERTAG}/screenshots`, 'ul.slideshow-image-viewer li', [
         {
@@ -79,6 +85,7 @@ async function getScreenshots(): Promise<[ScreenshotData]> {
     // .limit(1)
 }
 
+// get gameclip data
 async function getGameClips(): Promise<[GameClipData]> {
     return await x(`https://gamerdvr.com/gamer/${GAMERTAG}/videos`, 'ul.filter-clips li', [
         {
@@ -91,7 +98,9 @@ async function getGameClips(): Promise<[GameClipData]> {
     // .limit(1)
 }
 
+// main run script
 async function run() {
+    // Do screenshots first
     console.log('Will grab screenshots...')
     let screenshots = await getScreenshots()
     for (const screen of screenshots) {
@@ -101,6 +110,7 @@ async function run() {
         console.log('') // Log empty line
     }
 
+    // Now do gameclips
     console.log('Will grab game clips...')
     let clips = await getGameClips()
     for (const clip of clips) {
@@ -111,6 +121,7 @@ async function run() {
     }
 }
 
+// Check if Gamertag has been passed
 if (!GAMERTAG) {
     console.error('Please pass a gamertag')
     console.log('ts-node app.ts GAMERTAG')
