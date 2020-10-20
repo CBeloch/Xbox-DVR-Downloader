@@ -2,6 +2,7 @@ import os
 import re
 
 import lib.helper as helper
+import datetime
 
 from aiohttp import ClientResponseError, ClientSession
 from xbox.webapi.api.client import XboxLiveClient
@@ -77,8 +78,8 @@ async def gameclips(TARGET_DIR: str, xbl_client: XboxLiveClient, offset: int = 0
         # Create Game Folder if it does not exist
         os.makedirs(TARGET_DIR_GAME, exist_ok=True)
 
-        CLIP_DESTINATION = "%s/%s" % (TARGET_DIR_GAME, clip.date_recorded.replace(":", "-"))
-        
+        CLIP_DESTINATION = "%s/%s" % (TARGET_DIR_GAME, datetime.datetime.strptime(clip.date_recorded, '%Y-%m-%dT%H:%M:%SZ').strftime("%Y-%m-%d_%H-%M-%S"))
+
         await download(clip.game_clip_uris[0].uri, CLIP_DESTINATION, True)
 
         # print("Clip %d downloaded" % (offset + idx + 1))
