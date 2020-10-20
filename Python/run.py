@@ -13,8 +13,10 @@ from xbox.webapi.common.exceptions import AuthenticationException
 
 from xbox.webapi.authentication.models import OAuth2TokenResponse
 
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 TOKEN_DIR = "./token.json"
-TARGET_DIR = "./Games" if len(sys.argv) == 1 else sys.argv[1]
+TARGET_DIR = "../Games" if len(sys.argv) == 1 else sys.argv[1]
 
 TARGET_DIR_ABS = os.path.abspath(TARGET_DIR)
 
@@ -31,7 +33,7 @@ async def run():
         # Setup Authentication
 
         auth_mgr = AuthenticationManager(
-            session, None, None, ""
+            session, CLIENT_ID, CLIENT_SECRET, ""
         )
 
         with open(TOKEN_DIR, mode="r") as f:
