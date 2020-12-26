@@ -56,7 +56,7 @@ async function download(urlString: string, destination: string, filename: string
     let response = await fetch(urlString)
 
     if (response.ok) {
-        await new Promise((resolve, reject) => {
+        await new Promise<void>((resolve, reject) => {
             let fileStream = fs.createWriteStream(fileDestination)
             response.body.pipe(fileStream)
             response.body.on("error", (err) => {
